@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  # Note: If you are assigning a custom name to your db service on the line below, make sure it does not contain underscores
+  db:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: jasper123 
+      POSTGRES_DB: supertokensDB
+    ports:
+      - 5432:5432
+    networks:
+      - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'pg_isready']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:5.0
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRESQL_CONNECTION_URI: "postgresql://root:jasper123@127.0.0.1:5432/supertokensDB"
+    networks:
+      - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        bash -c 'exec 3<>/dev/tcp/127.0.0.1/5432 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:5432\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  app_network:
+    driver: bridge
