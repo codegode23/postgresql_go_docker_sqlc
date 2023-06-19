@@ -1,16 +1,20 @@
-docker.auth.core: |
-			docker run \
-			-p 3567:3567 -d registry.supertokens.io/supertokens/supertokens-postgresql:5.0
-
 
 docker.postgres: |
 			docker run \
+			--name jasperDB \
+			-e POSTGRES_USER=root \
+			-e POSTGRES_PASSWORD=jasper123 \
 			-p 5432:5432 \
-			-e POSTGRESQL_USER="root" \
-			-e POSTGRESQL_PASSWORD="jasper123" \
-			-e POSTGRESQL_HOST="127.0.0.1" \
-			-e POSTGRESQL_PORT="5432" \
-			-e POSTGRESQL_DATABASE_NAME="supertokensDB" \
-			-d registry.supertokens.io/supertokens/supertokens-postgresql
+			-d postgres \
+			-c listen_addresses=0.0.0.0
 
-.PHONY: docker.auth.core docker.postgres
+
+docker.auth.core: |
+			docker run \
+			--name superJasperAuthCore \
+			-p 3567:3567 -d registry.supertokens.io/supertokens/supertokens-postgresql:5.0
+
+
+
+
+.PHONY: docker.postgres docker.auth.core

@@ -1,0 +1,4 @@
+--name jasperDB \
+			-p 5432:5432 \
+			-e POSTGRESQL_CONNECTION_URI="postgresql://root:jasper123@127.0.0.1/supertokensDB" \
+			-d postgres
