@@ -1,4 +1,7 @@
 
+MIGRATIONS_FOLDER = $(PWD)/db/migration
+DATABASE_URL = postgresql://root:jasper123@127.0.0.1:5432/supertokensDB?sslmode=disable
+
 docker.postgres: |
 			docker run \
 			--name jasperDB \
@@ -16,7 +19,16 @@ docker.auth.core: |
 			-e POSTGRESQL_CONNECTION_URI="postgresql://root:jasper123@127.0.0.1:5432/supertokensDB"  \
 			-p 3567:3567 -d registry.supertokens.io/supertokens/supertokens-postgresql:5.0
 
+migrate_up: |
+		migrate -path $(MIGRATIONS_FOLDER) -database "$(DATABASE_URL)" -verbose up
+
+
+migrate_down: |
+		migrate -path $(MIGRATIONS_FOLDER) -database "$(DATABASE_URL)" -verbose down 
+
+migrate_fix: |
+		migrate -path $(MIGRATIONS_FOLDER) -database "$(DATABASE_URL)" force
 
 
 
-.PHONY: docker.postgres docker.auth.core
+.PHONY: docker.postgres docker.auth.core migrate_up migrate_down migrate_fix
