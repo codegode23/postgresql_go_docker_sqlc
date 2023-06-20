@@ -10,7 +10,7 @@ import (
 	"database/sql"
 )
 
-const createPlayers = `-- name: CreatePlayers :one
+const team = `-- name: Team :one
 INSERT INTO teams (
   name,
   ground
@@ -19,13 +19,13 @@ INSERT INTO teams (
 ) RETURNING team_id, name, ground, created_at
 `
 
-type CreatePlayersParams struct {
+type TeamParams struct {
 	Name   sql.NullString `json:"name"`
 	Ground sql.NullString `json:"ground"`
 }
 
-func (q *Queries) CreatePlayers(ctx context.Context, arg CreatePlayersParams) (Team, error) {
-	row := q.db.QueryRowContext(ctx, createPlayers, arg.Name, arg.Ground)
+func (q *Queries) Team(ctx context.Context, arg TeamParams) (Team, error) {
+	row := q.db.QueryRowContext(ctx, team, arg.Name, arg.Ground)
 	var i Team
 	err := row.Scan(
 		&i.TeamID,

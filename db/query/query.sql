@@ -1,4 +1,4 @@
--- name: CreatePlayers :one
+-- name: Team :one
 INSERT INTO teams (
   name,
   ground
