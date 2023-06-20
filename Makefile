@@ -27,7 +27,7 @@ migrate_down: |
 		migrate -path $(MIGRATIONS_FOLDER) -database "$(DATABASE_URL)" -verbose down 
 
 migrate_fix: |
-		migrate -path $(MIGRATIONS_FOLDER) -database "$(DATABASE_URL)" force
+		migrate -path $(MIGRATIONS_FOLDER) -database "$(DATABASE_URL)" force 1
 
 
 
