@@ -29,6 +29,8 @@ migrate_down: |
 migrate_fix: |
 		migrate -path $(MIGRATIONS_FOLDER) -database "$(DATABASE_URL)" force 1
 
+sqlc: |
+		sqlc generate
 
 
 .PHONY: docker.postgres docker.auth.core migrate_up migrate_down migrate_fix
