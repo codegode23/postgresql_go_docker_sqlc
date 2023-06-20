@@ -4,6 +4,7 @@ docker.postgres: |
 			--name jasperDB \
 			-e POSTGRES_USER=root \
 			-e POSTGRES_PASSWORD=jasper123 \
+			-e POSTGRES_DB=supertokensDB \
 			-p 5432:5432 \
 			-d postgres \
 			-c listen_addresses=0.0.0.0
@@ -12,6 +13,7 @@ docker.postgres: |
 docker.auth.core: |
 			docker run \
 			--name superJasperAuthCore \
+			-e POSTGRESQL_CONNECTION_URI="postgresql://root:jasper123@127.0.0.1:5432/supertokensDB"  \
 			-p 3567:3567 -d registry.supertokens.io/supertokens/supertokens-postgresql:5.0
 
 
