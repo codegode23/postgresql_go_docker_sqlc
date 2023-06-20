@@ -10,6 +10,73 @@ import (
 	"database/sql"
 )
 
+const deleteTeams = `-- name: DeleteTeams :exec
+DELETE FROM teams
+WHERE team_id = $1
+`
+
+func (q *Queries) DeleteTeams(ctx context.Context, teamID int64) error {
+	_, err := q.db.ExecContext(ctx, deleteTeams, teamID)
+	return err
+}
+
+const getTeam = `-- name: GetTeam :one
+SELECT team_id, name, ground, created_at FROM teams
+WHERE team_id = $1 LIMIT 1
+`
+
+func (q *Queries) GetTeam(ctx context.Context, teamID int64) (Team, error) {
+	row := q.db.QueryRowContext(ctx, getTeam, teamID)
+	var i Team
+	err := row.Scan(
+		&i.TeamID,
+		&i.Name,
+		&i.Ground,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const listTeams = `-- name: ListTeams :many
+SELECT team_id, name, ground, created_at FROM teams
+ORDER BY team_id
+LIMIT $1
+OFFSET $2
+`
+
+type ListTeamsParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) ListTeams(ctx context.Context, arg ListTeamsParams) ([]Team, error) {
+	rows, err := q.db.QueryContext(ctx, listTeams, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Team
+	for rows.Next() {
+		var i Team
+		if err := rows.Scan(
+			&i.TeamID,
+			&i.Name,
+			&i.Ground,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const team = `-- name: Team :one
 INSERT INTO teams (
   name,
@@ -26,6 +93,30 @@ type TeamParams struct {
 
 func (q *Queries) Team(ctx context.Context, arg TeamParams) (Team, error) {
 	row := q.db.QueryRowContext(ctx, team, arg.Name, arg.Ground)
+	var i Team
+	err := row.Scan(
+		&i.TeamID,
+		&i.Name,
+		&i.Ground,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const updateTeam = `-- name: UpdateTeam :one
+UPDATE teams
+SET ground = $2
+WHERE team_id = $1
+RETURNING team_id, name, ground, created_at
+`
+
+type UpdateTeamParams struct {
+	TeamID int64          `json:"team_id"`
+	Ground sql.NullString `json:"ground"`
+}
+
+func (q *Queries) UpdateTeam(ctx context.Context, arg UpdateTeamParams) (Team, error) {
+	row := q.db.QueryRowContext(ctx, updateTeam, arg.TeamID, arg.Ground)
 	var i Team
 	err := row.Scan(
 		&i.TeamID,
