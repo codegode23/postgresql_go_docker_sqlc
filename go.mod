@@ -2,7 +2,10 @@ module github.com/codegode23/postgresql_go_docker_sqlc
 
 go 1.20
 
-require github.com/supertokens/supertokens-golang v0.12.6
+require (
+	github.com/lib/pq v1.10.9
+	github.com/supertokens/supertokens-golang v0.12.6
+)
 
 require (
 	github.com/MicahParks/keyfunc v1.9.0 // indirect
@@ -14,12 +17,13 @@ require (
 	github.com/nyaruka/phonenumbers v1.0.73 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/twilio/twilio-go v0.26.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect
 	gopkg.in/h2non/gock.v1 v1.1.2 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
