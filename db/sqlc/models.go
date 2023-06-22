@@ -20,8 +20,8 @@ type Player struct {
 }
 
 type Team struct {
-	TeamID    int64          `json:"team_id"`
-	Name      sql.NullString `json:"name"`
-	Ground    sql.NullString `json:"ground"`
-	CreatedAt time.Time      `json:"created_at"`
+	TeamID    int64     `json:"team_id"`
+	Name      string    `json:"name"`
+	Ground    string    `json:"ground"`
+	CreatedAt time.Time `json:"created_at"`
 }

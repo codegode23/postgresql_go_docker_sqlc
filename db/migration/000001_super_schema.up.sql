@@ -1,7 +1,7 @@
 CREATE TABLE "teams" (
-  "team_id" bigint PRIMARY KEY,
-  "name" varchar UNIQUE,
-  "ground" varchar,
+  "team_id" bigint PRIMARY KEY NOT NULL,
+  "name" varchar UNIQUE NOT NULL,
+  "ground" varchar NOT NULL,
   "created_at" timestamp NOT NULL DEFAULT (now())
 );
 

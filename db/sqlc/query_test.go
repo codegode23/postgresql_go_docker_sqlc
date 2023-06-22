@@ -4,13 +4,14 @@ import (
 	"context"
 	"testing"
 
+	utils "github.com/codegode23/postgresql_go_docker_sqlc/superutils"
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateTeam(t *testing.T) {
+func TestCreateRandomTeam(t *testing.T) {
 	arg := TeamParams{
-		Name:   "JasperClub2",
-		Ground: "Draw",
+		Name:   utils.RandomTeamName(),
+		Ground: utils.RandomGround(),
 	}
 
 	teams, err := testQueries.Team(context.Background(), arg)

@@ -7,7 +7,6 @@ package superdb
 
 import (
 	"context"
-	"database/sql"
 )
 
 const deleteTeams = `-- name: DeleteTeams :exec
@@ -87,8 +86,8 @@ INSERT INTO teams (
 `
 
 type TeamParams struct {
-	Name   sql.NullString `json:"name"`
-	Ground sql.NullString `json:"ground"`
+	Name   string `json:"name"`
+	Ground string `json:"ground"`
 }
 
 func (q *Queries) Team(ctx context.Context, arg TeamParams) (Team, error) {
@@ -111,8 +110,8 @@ RETURNING team_id, name, ground, created_at
 `
 
 type UpdateTeamParams struct {
-	TeamID int64          `json:"team_id"`
-	Ground sql.NullString `json:"ground"`
+	TeamID int64  `json:"team_id"`
+	Ground string `json:"ground"`
 }
 
 func (q *Queries) UpdateTeam(ctx context.Context, arg UpdateTeamParams) (Team, error) {
