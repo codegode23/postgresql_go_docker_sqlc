@@ -78,20 +78,22 @@ func (q *Queries) ListTeams(ctx context.Context, arg ListTeamsParams) ([]Team, e
 
 const team = `-- name: Team :one
 INSERT INTO teams (
+  team_id,
   name,
   ground
 ) VALUES (
-  $1, $2
+  $1, $2, $3
 ) RETURNING team_id, name, ground, created_at
 `
 
 type TeamParams struct {
+	TeamID int64  `json:"team_id"`
 	Name   string `json:"name"`
 	Ground string `json:"ground"`
 }
 
 func (q *Queries) Team(ctx context.Context, arg TeamParams) (Team, error) {
-	row := q.db.QueryRowContext(ctx, team, arg.Name, arg.Ground)
+	row := q.db.QueryRowContext(ctx, team, arg.TeamID, arg.Name, arg.Ground)
 	var i Team
 	err := row.Scan(
 		&i.TeamID,

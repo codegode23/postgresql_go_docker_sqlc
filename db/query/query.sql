@@ -1,9 +1,10 @@
 -- name: Team :one
 INSERT INTO teams (
+  team_id,
   name,
   ground
 ) VALUES (
-  $1, $2
+  $1, $2, $3
 ) RETURNING *;
 
 

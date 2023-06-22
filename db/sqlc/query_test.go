@@ -10,6 +10,7 @@ import (
 
 func TestCreateRandomTeam(t *testing.T) {
 	arg := TeamParams{
+		TeamID: 1,
 		Name:   utils.RandomTeamName(),
 		Ground: utils.RandomGround(),
 	}
